@@ -1,0 +1,16 @@
+server:
+  port: ${SERVER_PORT}
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://localhost:28080/auth/realms/pagrn"
+
+keycloak:
+  realm: pagrn
+  resource: auth-pagrn
+  auth-server-url: http://localhost:28080/auth
+  ssl-required: external
+  public-client: true
