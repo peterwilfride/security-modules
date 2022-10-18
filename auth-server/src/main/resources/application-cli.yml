@@ -1,0 +1,28 @@
+server:
+  port: 8083
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://localhost:28080/auth/realms/pagrn"
+      client:
+        registration:
+          oauth2-client-credentials:
+            client-id: auth-pagrn
+            client-secret: 8c6b2c2e-adb8-460e-a712-53b88e3e6a3c
+            scope: email, profile
+            authorization-grant-type: password
+            provider: keycloak
+        provider:
+          keycloak:
+            issuer-uri: "http://localhost:28080/auth/realms/pagrn"
+            token-uri: "http://localhost:28080/auth/realms/pagrn/protocol/openid-connect/token"
+
+keycloak:
+  realm: pagrn
+  resource: auth-pagrn
+  auth-server-url: http://localhost:28080/auth
+  ssl-required: external
+  public-client: true
