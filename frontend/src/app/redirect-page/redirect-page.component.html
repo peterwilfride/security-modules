@@ -1,0 +1,49 @@
+<p>redirect-page works!</p>
+<div *ngIf="loggedIn; else loggedOut">
+    <h3>Usuário logado</h3>
+</div>
+<ng-template #loggedOut>
+    <h3>Usuário Deslogado</h3>
+</ng-template>
+
+<div *ngIf="loggedIn">
+<table
+      mat-table
+      [dataSource]="arr"
+      aria-label="Elements"
+
+      matSort (matSortChange)="handleSort($event)"
+    >
+
+
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+        <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="cpf">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>CPF</th>
+        <td mat-cell *matCellDef="let row">{{ row.servidor.pessoaFisica.cpf }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Denominacao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Denominacao</th>
+        <td mat-cell *matCellDef="let row">{{ row.setor.denominacao }}</td>
+        
+    </ng-container>
+
+    <ng-container matColumnDef="butao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Ações</th>
+        <td mat-cell *matCellDef="let row">
+            <button mat-raised-button color="accent"   (click)="selecionarVinculo( row.id)">
+                Selecionar Vinculo
+            </button>
+        </td>
+    </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+
+<button (click)="logout()">logout</button>
+</div>
+

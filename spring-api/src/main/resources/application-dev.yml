@@ -1,0 +1,26 @@
+server:
+  port: 9000
+
+spring:
+    datasource:
+      url: jdbc:postgresql://localhost/pagrn
+      username: peter
+      password: 28120134
+    jpa:
+      show-sql: true
+      hibernate:
+        ddl-auto: create-drop
+    security:
+      oauth2:
+        resourceserver:
+          jwt:
+            issuer-uri: "http://localhost:28080/auth/realms/pagrn"
+
+keycloak:
+  realm: pagrn
+  resource: auth-pagrn
+  auth-server-url: http://localhost:28080/auth
+  ssl-required: external
+  public-client: true
+
+
