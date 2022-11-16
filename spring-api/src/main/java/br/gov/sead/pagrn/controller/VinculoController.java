@@ -13,6 +13,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/vinculos")
+@CrossOrigin(origins="*")
 public class VinculoController {
 
     private final ModelMapper modelMapper;

@@ -6,6 +6,7 @@ import br.gov.sead.pagrn.dto.funcao.FuncaoDtoRequest;
 import br.gov.sead.pagrn.dto.funcao.FuncaoDtoResponse;
 import br.gov.sead.pagrn.service.FuncaoService;
 import br.gov.sead.pagrn.service.generic.IFindVinculoById;
+import org.keycloak.KeycloakPrincipal;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/funcoes")
+@CrossOrigin(origins="*")
 public class FuncaoController implements IFindVinculoById {
 
     private final FuncaoService service;
@@ -40,6 +42,7 @@ public class FuncaoController implements IFindVinculoById {
      * Método reponsável por listar todas as pessoas físicas do sistema e encaminhar para o DtoResponse
      */
     @GetMapping
+    //@PreAuthorize("hasAnyAuthority('role_funcao')")
     public ResponseEntity<Page<FuncaoDtoResponse>> find(
             @RequestParam(value = "q", defaultValue = "") String query,
             Pageable pageable) {
@@ -49,13 +52,17 @@ public class FuncaoController implements IFindVinculoById {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    //@PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<FuncaoDtoResponse> insert(@Valid @RequestBody FuncaoDtoRequest dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        Map<String, Object> obj = principal.getClaims();
+        //Jwt principal = (Jwt) authentication.getPrincipal();
 
-        String cpf = (String) obj.get("preferred_username");
+        //Map<String, Object> obj = principal.getClaims();
+        //authentication.getPrincipal().context.token.preferredUsername
+
+        //String cpf = (String) obj.get("preferred_username");
+        KeycloakPrincipal keycloakPrincipal = (KeycloakPrincipal) authentication.getPrincipal();
+        String cpf = keycloakPrincipal.getKeycloakSecurityContext().getToken().getPreferredUsername();
         Long vinculoId = dto.getIdVinculoResponsavel();
 
         System.out.println(cpf);
