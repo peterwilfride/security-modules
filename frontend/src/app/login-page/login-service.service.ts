@@ -11,8 +11,8 @@ import { Router } from '@angular/router';
 })
 export class LoginServiceService {
 
-  private readonly API = 'http://localhost:28080/auth/realms/pagrn/protocol/openid-connect/token';
-  private readonly LOGOFF_API = "http://localhost:28080/auth/realms/pagrn/protocol/openid-connect/logout";
+  private readonly API = 'http://localhost:8080/auth/realms/pagrn/protocol/openid-connect/token';
+  private readonly LOGOFF_API = "http://localhost:8080/auth/realms/pagrn/protocol/openid-connect/logout";
 
   //private readonly API = 'auth/realms/pagrn/protocol/openid-connect/token';
 
@@ -22,11 +22,15 @@ export class LoginServiceService {
   login(user:User){
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
+      //'Acess-Control-Allow-Headers':'Content-Type',
+      //'Acess-Control-Allow-Methods':'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+      //'Access-Control-Allow-Headers':'X-CSRF-Token, X-Requested-With, Accept, Content-Length, Content-Type, Date',
+      //'Access-Control-Allow-Origin':'*',
     });
 
     const params = new HttpParams()
     .set("client_id", "auth-pagrn")
-    .set("client_secret", "8c6b2c2e-adb8-460e-a712-53b88e3e6a3c")
+    .set("client_secret", "3e6e0eda-ded8-4b9e-a25f-2101a7c8d0c9")
     .set("grant_type", "password")
     .set("username", user.username.toString())
     .set("password", user.password.toString())
@@ -51,7 +55,7 @@ export class LoginServiceService {
 
     const params = new HttpParams()
     .set("client_id", "auth-pagrn")
-    .set("client_secret", "8c6b2c2e-adb8-460e-a712-53b88e3e6a3c")
+    .set("client_secret", "3e6e0eda-ded8-4b9e-a25f-2101a7c8d0c9")
     .set("refresh_token",refresh);
 
     return this.httpClient.post(this.LOGOFF_API,params).subscribe({
