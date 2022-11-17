@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { first } from 'rxjs';
 import { CookieService } from '../cookie.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +10,10 @@ import { CookieService } from '../cookie.service';
 export class RedirectServiceService {
 
   private readonly API = 'http://localhost:9000/vinculos/cpf/';
-  private readonly SETOR = 'http://localhost:9000/funcoes';
+  private readonly FUNCAO_URL = 'http://localhost:9000/funcoes';
 
 
-  constructor(private httpClient:HttpClient,public cookie: CookieService) { 
+  constructor(private httpClient:HttpClient,public cookie: CookieService, private router: Router) { 
 
   }
 
@@ -27,9 +28,6 @@ export class RedirectServiceService {
   }
 
   selVinculo(){
-
-    //84833783452
-    //mockando uma nomeacao
     var vinculo = localStorage.getItem("idVinculo")! ;
     
     const headers = new HttpHeaders({
@@ -46,7 +44,7 @@ export class RedirectServiceService {
       "idVinculoResponsavel": vinculo
     }
 
-    return this.httpClient.post(this.SETOR, JSON.stringify(novaFuncao), {headers}).subscribe({
+    return this.httpClient.post(this.FUNCAO_URL, JSON.stringify(novaFuncao), {headers}).subscribe({
       next: (u:any) => {
 
         console.log(u);
@@ -54,5 +52,6 @@ export class RedirectServiceService {
       error: (e:any) => {console.log(e);},
       complete: () => console.info('criacao de funcao completa')
     });
+    
   }
 }

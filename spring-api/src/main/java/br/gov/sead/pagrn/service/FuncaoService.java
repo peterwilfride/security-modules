@@ -2,6 +2,7 @@ package br.gov.sead.pagrn.service;
 
 import br.gov.sead.pagrn.domain.concrets.Funcao;
 import br.gov.sead.pagrn.domain.concrets.PessoaFisica;
+import br.gov.sead.pagrn.domain.type.SituacaoVinculo;
 import br.gov.sead.pagrn.domain.vinculos.Vinculo;
 import br.gov.sead.pagrn.repository.FuncaoRepository;
 import br.gov.sead.pagrn.service.generic.AbstractService;
@@ -30,7 +31,23 @@ public class FuncaoService extends AbstractService<Funcao, FuncaoRepository> {
     }
 
     public Boolean validateRequest(String cpf, Long idVinculo){
+        // verifica se o vinculo existe
+        Optional<Vinculo> v = vinculoService.findById(idVinculo);
+        if (v.isEmpty()) {
+            return false;
+        }
+
+        // verifica se o vinculo e ativo
+        if (v.get().getSituacao() != SituacaoVinculo.ATIVO) {
+            return false;
+        }
+
+        // vefifica se o vinculo pertence ao cpf
         List<Long> vinculosId = vinculoService.findByCPFdoServidor(cpf);
-        return vinculosId.contains(idVinculo);
+        if (!vinculosId.contains(idVinculo)) {
+            return false;
+        }
+
+        return true;
     }
 }

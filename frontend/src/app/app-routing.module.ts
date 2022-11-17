@@ -3,10 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { RedirectPageComponent } from './redirect-page/redirect-page.component';
 
-const routes: Routes = [{
+const routes: Routes = [
+  {
     path:"login", component:LoginPageComponent
-  },{
-    path:"", component:RedirectPageComponent
+  },
+  {
+    path:"vinculos", component:RedirectPageComponent
   }
 ];
 

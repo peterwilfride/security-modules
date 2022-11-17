@@ -4,6 +4,7 @@ import { CookieService } from '../cookie.service';
 import { LoginServiceService } from '../login-page/login-service.service';
 import { RedirectServiceService } from './redirect-service.service';
 import { MatSort, Sort } from '@angular/material/sort';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-redirect-page',
@@ -16,7 +17,8 @@ export class RedirectPageComponent implements OnInit {
   arr: Observable<any[]> = EMPTY;
   displayedColumns = ['id','cpf','Denominacao','butao'];
 
-  constructor(public cookie: CookieService,private service:LoginServiceService, private service2:RedirectServiceService) { }
+  constructor(public cookie: CookieService,private service:LoginServiceService, private service2:RedirectServiceService,
+    private router: Router) { }
 
   ngOnInit(): void {
     var userToken = this.cookie.getCookie("auth");
@@ -49,6 +51,8 @@ export class RedirectPageComponent implements OnInit {
   selecionarVinculo(idVinculo:String){
     localStorage.setItem("idVinculo",idVinculo.toString());
     this.service2.selVinculo();
+    console.log("id vinculo selecionado com sucesso!")
+    //this.router.navigate(['/home'])
   }
 
 }

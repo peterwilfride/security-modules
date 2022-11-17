@@ -1,13 +1,13 @@
 server:
-  port: 9000
+  port: ${SERVER_PORT}
 
 spring:
     main:
       allow-circular-references: true
     datasource:
       url: jdbc:postgresql://localhost/pagrn
-      username: postgres
-      password: 123456
+      username: ${DB_USERNAME}
+      password: ${DB_PASSWORD}
     jpa:
       show-sql: true
       hibernate:
@@ -16,12 +16,12 @@ spring:
       oauth2:
         resourceserver:
           jwt:
-            issuer-uri: "http://localhost:8080/auth/realms/pagrn"
+            issuer-uri: ${ISSUER_URI}
 
 keycloak:
-  realm: pagrn
-  resource: auth-pagrn
-  auth-server-url: http://localhost:8080/auth
+  realm: ${REALM}
+  resource: ${CLIENT_ID}
+  auth-server-url: ${AUTH_SERVER_URL}
   ssl-required: external
   public-client: true
 

@@ -7,6 +7,7 @@ import br.gov.sead.pagrn.dto.funcao.FuncaoDtoResponse;
 import br.gov.sead.pagrn.service.FuncaoService;
 import br.gov.sead.pagrn.service.generic.IFindVinculoById;
 import org.keycloak.KeycloakPrincipal;
+import org.keycloak.KeycloakSecurityContext;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,9 +18,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Map;
 import java.util.Optional;
@@ -54,25 +58,25 @@ public class FuncaoController implements IFindVinculoById {
     @PostMapping
     //@PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<FuncaoDtoResponse> insert(@Valid @RequestBody FuncaoDtoRequest dto) {
+        /*
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //Jwt principal = (Jwt) authentication.getPrincipal();
-
+        Object principal = authentication.getPrincipal();
         //Map<String, Object> obj = principal.getClaims();
-        //authentication.getPrincipal().context.token.preferredUsername
-
         //String cpf = (String) obj.get("preferred_username");
-        KeycloakPrincipal keycloakPrincipal = (KeycloakPrincipal) authentication.getPrincipal();
-        String cpf = keycloakPrincipal.getKeycloakSecurityContext().getToken().getPreferredUsername();
+        Long vinculoId = dto.getIdVinculoResponsavel();*/
+
+        final String name = getSecurityContext().getToken().getPreferredUsername();
         Long vinculoId = dto.getIdVinculoResponsavel();
 
-        System.out.println(cpf);
+        System.out.println(name);
         System.out.println(vinculoId);
 
-        if (!service.validateRequest(cpf, vinculoId)) {
+        if (!service.validateRequest(name, vinculoId)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        //this.find(vinculoId);
+
+        System.out.println("PASSOU!");
 
         try {
             Funcao funcao = modelMapper.map(dto, Funcao.class);
@@ -91,5 +95,11 @@ public class FuncaoController implements IFindVinculoById {
             return  vinculoOpt.get();
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+
+    // helper method to return the KeycloakSecurityContext object to fetch details from access token
+    private KeycloakSecurityContext getSecurityContext() {
+        final HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        return (KeycloakSecurityContext) request.getAttribute(KeycloakSecurityContext.class.getName());
     }
 }
