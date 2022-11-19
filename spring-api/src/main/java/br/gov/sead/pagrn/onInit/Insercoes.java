@@ -25,10 +25,12 @@ public record Insercoes(PessoaFisicaService pessoaFisicaService, ServidorService
         inserirServidor();
         inserirPessoaJuridica();
         inserirUnidadeOrganizacional();
+        inserirUnidadeOrganizacional2();
         inserirSetor();
         inserirCargo();
         inserirNivelCargo();
         inserirNomeacao();
+        inserirNomeacao2();
     }
 
     private void inserirPessoaFisica(){
@@ -103,7 +105,17 @@ public record Insercoes(PessoaFisicaService pessoaFisicaService, ServidorService
         unidadeOrganizacional.setDataInicioOperacao(LocalDate.now());
         unidadeOrganizacional.setCodIbgeCnae("31231");
         unidadeOrganizacional.setCodigoLegado("1");
-        unidadeOrganizacional.setSigla("SEARH");
+        unidadeOrganizacional.setSigla("SEAD");
+
+        unidadeOrganizacionalService.insert(unidadeOrganizacional, 1L);
+    }
+
+    private void inserirUnidadeOrganizacional2(){
+        UnidadeOrganizacional unidadeOrganizacional = new UnidadeOrganizacional();
+        unidadeOrganizacional.setDataInicioOperacao(LocalDate.now());
+        unidadeOrganizacional.setCodIbgeCnae("31231");
+        unidadeOrganizacional.setCodigoLegado("1");
+        unidadeOrganizacional.setSigla("SAUDE");
 
         unidadeOrganizacionalService.insert(unidadeOrganizacional, 1L);
     }
@@ -120,8 +132,8 @@ public record Insercoes(PessoaFisicaService pessoaFisicaService, ServidorService
         endereco.setUnidadeFederativa(UnidadeFederativa.RIO_GRANDE_DO_NORTE);
 
         Setor setor = new Setor();
-        setor.setDenominacao("Secreataria da Administração");
-        setor.setSigla("SEAD");
+        setor.setDenominacao("Setor de RH");
+        setor.setSigla("RH");
         setorService.insert(setor, null,1L, endereco);
     }
 
@@ -160,6 +172,21 @@ public record Insercoes(PessoaFisicaService pessoaFisicaService, ServidorService
         nomeacao.setDataVigencia(LocalDate.now());
         nomeacao.setDescricao("Nomeação de servidor efetivo civil");
         nomeacaoService.nomear(nomeacao, 1L , 1L, 1L, 1L, null);
+    }
+
+    private void inserirNomeacao2(){
+        Nomeacao nomeacao = new Nomeacao();
+        nomeacao.setDataNomeacao(LocalDate.now());
+        nomeacao.setDataPosse(LocalDate.now());
+        nomeacao.setDataInicioExercicio(LocalDate.now());
+//        nomeacao.setDataFinalExercicio(LocalDate.of(2022, 9, 13));
+        nomeacao.setDescontaIRPF(Boolean.TRUE);
+        nomeacao.setProcessoAdministrativo("31287631232");
+        nomeacao.setRegimeJuridico(RegimeJuridico.RJU);
+        nomeacao.setTipoVinculo(TipoVinculo.EFETIVO_CIVIL);
+        nomeacao.setDataVigencia(LocalDate.now());
+        nomeacao.setDescricao("Nomeação de servidor efetivo civil");
+        nomeacaoService.nomear(nomeacao, 1L , 1L, 2L, 1L, null);
     }
 
 }

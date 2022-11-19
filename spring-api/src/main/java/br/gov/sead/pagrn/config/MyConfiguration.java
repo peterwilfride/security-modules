@@ -65,6 +65,7 @@ public class MyConfiguration extends KeycloakWebSecurityConfigurerAdapter
                 //.antMatchers("/admin*").hasRole("ADMIN")
                 //.antMatchers("/funcoes**").hasRole("funcao")
                 .antMatchers(HttpMethod.POST,"/funcoes").hasAuthority("funcao")
+                .antMatchers(HttpMethod.POST,"/nomeacoes").hasAuthority("nomecao")
                 .anyRequest().permitAll();
     }
 }

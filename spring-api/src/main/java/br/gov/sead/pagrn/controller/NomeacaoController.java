@@ -4,6 +4,8 @@ import br.gov.sead.pagrn.domain.events.Nomeacao;
 import br.gov.sead.pagrn.dto.nomeacao.NomeacaoDtoRequest;
 import br.gov.sead.pagrn.dto.nomeacao.NomeacaoDtoResponse;
 import br.gov.sead.pagrn.service.NomeacaoService;
+import br.gov.sead.pagrn.service.generic.ValidateVinculo;
+import org.keycloak.KeycloakSecurityContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.modelmapper.ModelMapper;
@@ -11,11 +13,15 @@ import org.modelmapper.TypeMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/nomeacoes")
@@ -57,6 +63,27 @@ public class NomeacaoController {
      */
     @PostMapping
     public ResponseEntity<NomeacaoDtoResponse> insert(@Valid @RequestBody NomeacaoDtoRequest dto) {
+
+        final String name = getSecurityContext().getToken().getPreferredUsername();
+        Long vinculoId = dto.getIdVinculoResponsavel();
+
+        ValidateVinculo vv = service.validateRequest(name, vinculoId);
+
+        if (!vv.getIsValid()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        System.out.println("PASSSOU NA VALIDAÇAO DE VINCULO");
+
+        // validar se usuario nao e servidor da SEAD, se true entao a UO da servidor do dto
+        // deve ser igual ao do usuario
+        if (!vv.getVinculo().getUnidadeOrganizacional().getSigla().equals("SEAD")) {
+            Long idUO = dto.getUnidadeOrganizacional();
+            if (!Objects.equals(idUO, vv.getVinculo().getUnidadeOrganizacional().getId())) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            }
+        }
+        System.out.println("PASSOU NA VALIDAÇAO DE UO");
+
         try {
             Nomeacao nomeacao = modelMapper.map(dto, Nomeacao.class);
 
@@ -77,5 +104,11 @@ public class NomeacaoController {
         } catch (EntityExistsException e) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getLocalizedMessage());
         }
+    }
+
+    // helper method to return the KeycloakSecurityContext object to fetch details from access token
+    private KeycloakSecurityContext getSecurityContext() {
+        final HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        return (KeycloakSecurityContext) request.getAttribute(KeycloakSecurityContext.class.getName());
     }
 }
