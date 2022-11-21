@@ -15,11 +15,16 @@ public class DemissaoDtoRequest {
     //Demissao
     private String motivo;
 
-    private String processoAdministrativo;
+    //TODO esclarecer se esse attr continua
+    //private String processoAdministrativo;
+
+    private String dadosPublicacao;
 
     //evento
 
     private LocalDate dataVigencia;
+
+    private LocalDate dataRegistro;
 
     private String descricao;
 

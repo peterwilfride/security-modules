@@ -20,6 +20,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/exoneracoes")
+@CrossOrigin(origins="*")
 public class ExoneracaoController {
     private final ExoneracaoService service;
 

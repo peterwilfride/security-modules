@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class RedirectServiceService {
 
   private readonly API = 'http://localhost:9000/vinculos/cpf/';
-  private readonly FUNCAO_URL = 'http://localhost:9000/funcoes';
+  private readonly EXONERACAO_URL = 'http://localhost:9000/exoneracoes';
 
 
   constructor(private httpClient:HttpClient,public cookie: CookieService, private router: Router) { 
@@ -36,21 +36,36 @@ export class RedirectServiceService {
       'Authorization': this.cookie.getCookie("auth")
     });
 
-    var novaFuncao = {
+    /*var novaFuncao = {
       "denominacao": "string2",
       "tipoGratificacao": "ABONO_PERMANENCIA",
       "valorRepresentacao": 0,
       "valorVencimento": 0,
       "idVinculoResponsavel": vinculo
+    }*/
+
+    var novaExoneracao = {
+      "dataVigencia": "2022-11-21",
+      "descricao": "string",
+      "processoAdministrativo": "string",
+      "vinculo": vinculo
     }
 
-    return this.httpClient.post(this.FUNCAO_URL, JSON.stringify(novaFuncao), {headers}).subscribe({
+
+    return this.httpClient.post(this.EXONERACAO_URL, JSON.stringify(novaExoneracao), {headers}).subscribe({
       next: (u:any) => {
 
-        console.log(u);
+        console.log(u)
       },
-      error: (e:any) => {console.log(e);},
-      complete: () => console.info('criacao de funcao completa')
+      error: (e:any) => {
+        console.log(e)
+        alert("não foi possível realizar a exoneração deste usuário")
+      },
+      complete: () => {
+        window.location.reload(),
+        console.info('criacao de funcao completa')
+        
+      }
     });
     
   }

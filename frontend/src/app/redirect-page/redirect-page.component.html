@@ -1,3 +1,10 @@
+<head>
+    <style>
+        table td,table th{
+            padding: 10px;
+        }
+    </style>
+</head>
 <p>redirect-page works!</p>
 <div *ngIf="loggedIn; else loggedOut">
     <h3>Usuário logado</h3>
@@ -21,14 +28,20 @@
         <td mat-cell *matCellDef="let row">{{ row.id }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="cpf">
+    <ng-container matColumnDef="cpf" >
         <th mat-header-cell *matHeaderCellDef mat-sort-header>CPF</th>
-        <td mat-cell *matCellDef="let row">{{ row.servidor.pessoaFisica.cpf }}</td>
+        <td mat-cell *matCellDef="let row" >{{ row.servidor.pessoaFisica.cpf }}</td>
     </ng-container>
 
     <ng-container matColumnDef="Denominacao">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Denominacao</th>
         <td mat-cell *matCellDef="let row">{{ row.unidadeOrganizacional.sigla }}</td>
+        
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let row">{{ row.situacao }}</td>
         
     </ng-container>
 

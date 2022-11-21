@@ -15,7 +15,7 @@ export class RedirectPageComponent implements OnInit {
 
   loggedIn: Boolean = false;
   arr: Observable<any[]> = EMPTY;
-  displayedColumns = ['id','cpf','Denominacao','butao'];
+  displayedColumns = ['id','cpf','Denominacao','status','butao'];
 
   constructor(public cookie: CookieService,private service:LoginServiceService, private service2:RedirectServiceService,
     private router: Router) { }
