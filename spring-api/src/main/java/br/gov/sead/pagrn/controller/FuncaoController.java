@@ -6,6 +6,7 @@ import br.gov.sead.pagrn.dto.funcao.FuncaoDtoRequest;
 import br.gov.sead.pagrn.dto.funcao.FuncaoDtoResponse;
 import br.gov.sead.pagrn.service.FuncaoService;
 import br.gov.sead.pagrn.service.generic.IFindVinculoById;
+import br.gov.sead.pagrn.service.generic.ValidateVinculo;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
 import org.modelmapper.ModelMapper;
@@ -71,12 +72,18 @@ public class FuncaoController implements IFindVinculoById {
         System.out.println(name);
         System.out.println(vinculoId);
 
-        if (!service.validateRequest(name, vinculoId)) {
+        ValidateVinculo vv = service.validateRequest(name, vinculoId);
+
+        if (!vv.getIsValid()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
+        System.out.println("PASSSOU NA VALIDAÇAO DE VINCULO");
 
-
-        System.out.println("PASSOU!");
+        // validar se usuario nao e servidor da SEAD
+        if (!vv.getVinculo().getUnidadeOrganizacional().getSigla().equals("SEAD")) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        System.out.println("PASSOU NA VALIDAÇAO DE UO");
 
         try {
             Funcao funcao = modelMapper.map(dto, Funcao.class);
