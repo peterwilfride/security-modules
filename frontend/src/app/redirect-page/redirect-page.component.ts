@@ -3,7 +3,7 @@ import { EMPTY, Observable, of } from 'rxjs';
 import { CookieService } from '../cookie.service';
 import { LoginServiceService } from '../login-page/login-service.service';
 import { RedirectServiceService } from './redirect-service.service';
-import { MatSort, Sort } from '@angular/material/sort';
+import { Sort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 
 @Component({
@@ -55,9 +55,7 @@ export class RedirectPageComponent implements OnInit {
 
   selecionarVinculo(idVinculo:String){
     localStorage.setItem("idVinculo",idVinculo.toString());
-    //this.service2.selVinculo();
     console.log("id vinculo selecionado com sucesso!")
     this.router.navigate([''])
   }
-
 }

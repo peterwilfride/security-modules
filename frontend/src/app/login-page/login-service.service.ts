@@ -5,14 +5,17 @@ import { HttpHeaders } from '@angular/common/http';
 import { Token } from '../../models/Token.model';
 import { CookieService } from '../cookie.service';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginServiceService {
 
-  private readonly API = 'http://localhost:8080/auth/realms/pagrn/protocol/openid-connect/token';
-  private readonly LOGOFF_API = "http://localhost:8080/auth/realms/pagrn/protocol/openid-connect/logout";
+  readonly port = environment.keycloakPort;
+
+  private readonly API = 'http://localhost:' + this.port + '/auth/realms/pagrn/protocol/openid-connect/token';
+  private readonly LOGOFF_API = 'http://localhost:' + this.port + '/auth/realms/pagrn/protocol/openid-connect/logout';
 
   //private readonly API = 'auth/realms/pagrn/protocol/openid-connect/token';
 
@@ -21,25 +24,18 @@ export class LoginServiceService {
 
   login(user:User){
     const headers = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',
-      //'Acess-Control-Allow-Headers':'Content-Type',
-      //'Acess-Control-Allow-Methods':'GET,OPTIONS,PATCH,DELETE,POST,PUT',
-      //'Access-Control-Allow-Headers':'X-CSRF-Token, X-Requested-With, Accept, Content-Length, Content-Type, Date',
-      //'Access-Control-Allow-Origin':'*',
+      'Content-Type': 'application/x-www-form-urlencoded'
     });
 
     const params = new HttpParams()
-    .set("client_id", "auth-pagrn")
-    //.set("client_secret", "3e6e0eda-ded8-4b9e-a25f-2101a7c8d0c9")
-    .set("client_secret", "3e6e0eda-ded8-4b9e-a25f-2101a7c8d0c9")
+    .set("client_id", environment.clientId)
+    .set("client_secret", environment.clientSecret)
     .set("grant_type", "password")
     .set("username", user.username.toString())
     .set("password", user.password.toString())
 
     return this.httpClient.post<Token>(this.API, params, { headers }).subscribe({
       next: (u:any) => {
-        //localStorage.setItem('auth', u.token_type+" "+u.access_token);
-
         console.log(u);
         this.cookie.setCookie({name:'auth', value: u.token_type+" "+u.access_token, expireSecs: 600 });
         this.cookie.setCookie({name:'refresh', value: u.refresh_token, expireSecs: 600 });
@@ -55,9 +51,8 @@ export class LoginServiceService {
     var refresh = this.cookie.getCookie("refresh");
 
     const params = new HttpParams()
-    .set("client_id", "auth-pagrn")
-    //.set("client_secret", "3e6e0eda-ded8-4b9e-a25f-2101a7c8d0c9")
-    .set("client_secret", "3e6e0eda-ded8-4b9e-a25f-2101a7c8d0c9")
+    .set("client_id", environment.clientId)
+    .set("client_secret", environment.clientSecret)
     .set("refresh_token",refresh);
 
     return this.httpClient.post(this.LOGOFF_API,params).subscribe({

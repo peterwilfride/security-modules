@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  keycloakPort: 28080,
+  clientId: "auth-pagrn",
+  clientSecret: "d41190a5-34fd-4a8e-90d8-add37512c909",
 };
 
 /*
