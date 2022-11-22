@@ -67,6 +67,9 @@ public class NomeacaoController {
         final String name = getSecurityContext().getToken().getPreferredUsername();
         Long vinculoId = dto.getIdVinculoResponsavel();
 
+        System.out.println(name);
+        System.out.println(vinculoId);
+
         ValidateVinculo vv = service.validateRequest(name, vinculoId);
 
         if (!vv.getIsValid()) {

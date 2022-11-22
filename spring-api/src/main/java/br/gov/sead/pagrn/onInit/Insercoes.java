@@ -113,8 +113,8 @@ public record Insercoes(PessoaFisicaService pessoaFisicaService, ServidorService
     private void inserirUnidadeOrganizacional2(){
         UnidadeOrganizacional unidadeOrganizacional = new UnidadeOrganizacional();
         unidadeOrganizacional.setDataInicioOperacao(LocalDate.now());
-        unidadeOrganizacional.setCodIbgeCnae("31231");
-        unidadeOrganizacional.setCodigoLegado("1");
+        unidadeOrganizacional.setCodIbgeCnae("31232");
+        unidadeOrganizacional.setCodigoLegado("2");
         unidadeOrganizacional.setSigla("SAUDE");
 
         unidadeOrganizacionalService.insert(unidadeOrganizacional, 1L);

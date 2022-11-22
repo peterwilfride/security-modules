@@ -6,6 +6,7 @@ import br.gov.sead.pagrn.domain.type.SituacaoVinculo;
 import br.gov.sead.pagrn.domain.vinculos.Vinculo;
 import br.gov.sead.pagrn.repository.FuncaoRepository;
 import br.gov.sead.pagrn.service.generic.AbstractService;
+import br.gov.sead.pagrn.service.generic.ValidateVinculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,24 +31,24 @@ public class FuncaoService extends AbstractService<Funcao, FuncaoRepository> {
         return vinculoService.findById(vinculoId);
     }
 
-    public Boolean validateRequest(String cpf, Long idVinculo){
+    public ValidateVinculo validateRequest(String cpf, Long idVinculo){
         // verifica se o vinculo existe
         Optional<Vinculo> v = vinculoService.findById(idVinculo);
         if (v.isEmpty()) {
-            return false;
+            return new ValidateVinculo(false, null);
         }
 
         // verifica se o vinculo e ativo
         if (v.get().getSituacao() != SituacaoVinculo.ATIVO) {
-            return false;
+            return new ValidateVinculo(false, null);
         }
 
         // vefifica se o vinculo pertence ao cpf
         List<Long> vinculosId = vinculoService.findByCPFdoServidor(cpf);
         if (!vinculosId.contains(idVinculo)) {
-            return false;
+            return new ValidateVinculo(false, null);
         }
 
-        return true;
+        return new ValidateVinculo(true, v.get());
     }
 }
