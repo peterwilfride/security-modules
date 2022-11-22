@@ -25,6 +25,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/nomeacoes")
+@CrossOrigin(origins="*")
 public class NomeacaoController {
 
     private final NomeacaoService service;

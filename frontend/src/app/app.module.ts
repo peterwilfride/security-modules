@@ -25,13 +25,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker'; 
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
-import { RedirectPageComponent } from './redirect-page/redirect-page.component'; 
+import { RedirectPageComponent } from './redirect-page/redirect-page.component';
+import { HomeComponent } from './home/home.component'; 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
-    RedirectPageComponent
+    RedirectPageComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

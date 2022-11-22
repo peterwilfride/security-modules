@@ -62,7 +62,7 @@ export class RedirectServiceService {
         alert("não foi possível realizar a exoneração deste usuário")
       },
       complete: () => {
-        window.location.reload(),
+        //window.location.reload(),
         console.info('criacao de funcao completa')
         
       }

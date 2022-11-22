@@ -23,6 +23,11 @@ export class RedirectPageComponent implements OnInit {
   ngOnInit(): void {
     var userToken = this.cookie.getCookie("auth");
     this.loggedIn = userToken.length? true : false;
+
+    if(this.loggedIn === false){
+      this.router.navigate(['/login'])
+    }
+
     this.service2.listVinculos().subscribe(
       {
         next:(ele:any) =>{
@@ -50,9 +55,9 @@ export class RedirectPageComponent implements OnInit {
 
   selecionarVinculo(idVinculo:String){
     localStorage.setItem("idVinculo",idVinculo.toString());
-    this.service2.selVinculo();
+    //this.service2.selVinculo();
     console.log("id vinculo selecionado com sucesso!")
-    //this.router.navigate(['/home'])
+    this.router.navigate([''])
   }
 
 }
