@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
@@ -25,6 +26,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @KeycloakConfiguration
 //@ComponentScan(basePackageClasses = KeycloakSecurityComponents.class)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class MyConfiguration extends KeycloakWebSecurityConfigurerAdapter
 {
     /**
@@ -64,9 +66,12 @@ public class MyConfiguration extends KeycloakWebSecurityConfigurerAdapter
                 .authorizeRequests()
                 //.antMatchers("/admin*").hasRole("ADMIN")
                 //.antMatchers("/funcoes**").hasRole("funcao")
-                .antMatchers(HttpMethod.POST,"/funcoes").hasAuthority("funcao")
+                .antMatchers(HttpMethod.GET,"/vinculos/cpf/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/nomeacoes").hasAuthority("nomeacao")
-                .antMatchers(HttpMethod.POST,"/exoneracoes").hasAuthority("exoneracao")
-                .anyRequest().permitAll();
+                .anyRequest().authenticated();
+                //.antMatchers(HttpMethod.POST,"/funcoes").hasAuthority("funcao")
+                //.antMatchers(HttpMethod.POST,"/nomeacoes").hasAuthority("nomeacao")
+                //.antMatchers(HttpMethod.POST,"/exoneracoes").hasAuthority("exoneracao")
+                //.anyRequest().permitAll();
     }
 }

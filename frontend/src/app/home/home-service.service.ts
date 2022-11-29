@@ -35,11 +35,11 @@ export class HomeServiceService {
     var vinculo = localStorage.getItem("idVinculo")! ;
 
     var novaNomeacao = {
-      "dataFinalExercicio": "2022-11-22",
-      "dataInicioExercicio": "2022-11-22",
-      "dataNomeacao": "2022-11-22",
-      "dataPosse": "2022-11-22",
-      "dataVigencia": "2022-11-22",
+      "dataFinalExercicio": new Date().toISOString().split('T')[0],
+      "dataInicioExercicio": new Date().toISOString().split('T')[0],
+      "dataNomeacao": new Date().toISOString().split('T')[0],
+      "dataPosse": new Date().toISOString().split('T')[0],
+      "dataVigencia": new Date().toISOString().split('T')[0],
       "descontaIRPF": true,
       "descricao": "string",
       "idVinculoResponsavel": vinculo,
@@ -82,17 +82,14 @@ export class HomeServiceService {
 
     return this.httpClient.post(url, JSON.stringify(json), {headers}).subscribe({
       next: (u:any) => {
-
         console.log(u)
       },
       error: (e:any) => {
         console.log(e)
-        alert("não foi possível realizar a exoneração deste usuário")
+        alert("ERROR")
       },
       complete: () => {
-        //window.location.reload(),
-        console.info('criacao de funcao completa')
-        
+        console.info('SUCESSO')
       }
     });
   }

@@ -12,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -57,6 +59,7 @@ public class NomeacaoController {
         return new ResponseEntity<>(nomeacaoDtoResponses, HttpStatus.OK);
     }
 
+
     /**
      * Método reponsável por receber um request de um cargo para inserir no sistema
      *
@@ -74,7 +77,7 @@ public class NomeacaoController {
         ValidateVinculo vv = service.validateRequest(name, vinculoId);
 
         if (!vv.getIsValid()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         System.out.println("PASSSOU NA VALIDAÇAO DE VINCULO");
 
@@ -83,7 +86,7 @@ public class NomeacaoController {
         if (!vv.getVinculo().getUnidadeOrganizacional().getSigla().equals("SEAD")) {
             Long idUO = dto.getUnidadeOrganizacional();
             if (!Objects.equals(idUO, vv.getVinculo().getUnidadeOrganizacional().getId())) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
         }
         System.out.println("PASSOU NA VALIDAÇAO DE UO");

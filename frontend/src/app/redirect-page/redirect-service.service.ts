@@ -20,7 +20,8 @@ export class RedirectServiceService {
   listVinculos (){
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Access-Control-Allow-Origin':'*',
+      //'Access-Control-Allow-Origin':'*',
+      //'Authorization': this.cookie.getCookie("auth")
     });
 
     var cpf = localStorage.getItem("username");
